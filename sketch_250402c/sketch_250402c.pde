@@ -104,7 +104,7 @@ void setup() {
   String musicPathway = "Music/";
   String songName = "Cycles";
   String fileExtension = ".mp3";
-  String musicDirectory = "../../../../" + musicPathway;
+  String musicDirectory = "../../" + musicPathway;
   String filePath = musicDirectory + songName + fileExtension;
 
   playList[currentSong] = minim.loadFile(filePath);
