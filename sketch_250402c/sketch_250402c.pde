@@ -119,7 +119,7 @@ void draw() {
      (musicButtonOFF && mouseX > musicMenuX && mouseX < musicMenuX + musicMenuWidth &&
       mouseY > musicMenuY && mouseY < musicMenuY + musicMenuHeight)) {
     fill(255, 0, 0); // red
-    drawTriangleButton(musicMenuX, musicMenuY, musicMenuWidth, musicMenuHeight);
+    drawTriangleButton(offMenuX, offMenuY, offMenuM, offMenuN, offMenuA, offMenuB);
   }
 
   // Display menu
@@ -128,35 +128,32 @@ void draw() {
 }
 
 // Draws the play-style triangle button
-void drawTriangleButton(float x, float y, float w, float h) {
-  float x1 = x + w/2;
+void drawTriangleButton(float x, float y, float w, float h, float n, float m) {
+  float x1 = x;
   float y1 = y;
-  float x2 = x;
-  float y2 = y + h;
-  float x3 = x + w;
-  float y3 = y + h;
+  float x2 = w;
+  float y2 = h;
+  float x3 = n;
+  float y3 = m;
   triangle(x1, y1, x2, y2, x3, y3);
 }
 
 // Utility: point inside triangle using area comparison
-boolean pointInTriangle(float px, float py, float ax, float ay, float bx, float by, float cx, float cy) {
-  float areaOrig = abs((bx - ax)*(cy - ay) - (cx - ax)*(by - ay));
-  float area1 = abs((ax - px)*(by - py) - (bx - px)*(ay - py));
-  float area2 = abs((bx - px)*(cy - py) - (cx - px)*(by - py));
-  float area3 = abs((cx - px)*(ay - py) - (ax - px)*(cy - py));
-  return (area1 + area2 + area3) <= areaOrig + 0.5;
+boolean pointInTriangle(float x1, float y1,float x2, float y2, float x3, float y3) {
+   float area = 0.5 * abs(onMenuX * (onMenuN - onMenuB) +onMenuM * (onMenuB - onMenuY) +onMenuA * (onMenuY - onMenuN));
+  return true;
 }
 
 void mousePressed() {
-  // Triangle vertices
-  float x1 = musicMenuX + musicMenuWidth/2;
-  float y1 = musicMenuY;
-  float x2 = musicMenuX;
-  float y2 = musicMenuY + musicMenuHeight;
-  float x3 = musicMenuX + musicMenuWidth;
-  float y3 = musicMenuY + musicMenuHeight;
+  // Triangle vertices 
+  float x1 = offMenuX;
+  float y1 = offMenuY;
+  float x2 = offMenuM;
+  float y2 = offMenuN;
+  float x3 = offMenuA;
+  float y3 = offMenuB;
 
-  if (pointInTriangle(mouseX, mouseY, x1, y1, x2, y2, x3, y3)) {
+  if (pointInTriangle(mouseX, mouseY,offMenuX, offMenuY, offMenuM, offMenuN, offMenuA, offMenuB)) {
     musicButtonOFF = !musicButtonOFF; // Toggle state
 
     if (musicButtonOFF) {
