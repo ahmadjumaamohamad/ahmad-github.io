@@ -109,26 +109,59 @@ void setup() {
 
   playList[currentSong] = minim.loadFile(filePath);
   println("Loaded: " + filePath);
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  rect(musicMenuX, musicMenuY, musicMenuWidth, musicMenuHeight);
 }
 
 void draw() {
   background(0);
 
   // Draw triangle button if not OFF, or if hovered over
-  if (!musicButtonOFF || 
+  // Display menu
+ ellipse(mouseX, mouseY, 5, 5);
+ 
+ 
+ triangle(offMenuX, offMenuY, offMenuM, offMenuN, offMenuA, offMenuB);
+ /*
+   if (!musicButtonOFF || 
      (musicButtonOFF && mouseX > musicMenuX && mouseX < musicMenuX + musicMenuWidth &&
       mouseY > musicMenuY && mouseY < musicMenuY + musicMenuHeight)) {
     fill(255, 0, 0); // red
     drawTriangleButton(offMenuX, offMenuY, offMenuM, offMenuN, offMenuA, offMenuB);
   }
+*/
+}
 
-  // Display menu
-  fill(255);
-  rect(displayMenuX, displayMenuY, displayMenuWidth, displayMenuHeight);
+boolean pointInTriangle(float px, float py, float x1, float y1, float x2, float y2, float x3, float y3) {
+  float areaTotal = triangleArea(x1, y1, x2, y2, x3, y3);
+  float area1 = triangleArea(px, py, x2, y2, x3, y3);
+  float area2 = triangleArea(x1, y1, px, py, x3, y3);
+  float area3 = triangleArea(x1, y1, x2, y2, px, py);
+  
+  float sumAreas = area1 + area2 + area3;
+  
+  return abs(areaTotal - sumAreas) < 0.01; // Small tolerance
+}
+float triangleArea(float x1, float y1, float x2, float y2, float x3, float y3) {
+  return 0.5 * abs(x1 * (y2 - y3) +
+                   x2 * (y3 - y1) +
+                   x3 * (y1 - y2));
 }
 
 // Draws the play-style triangle button
-void drawTriangleButton(float x, float y, float w, float h, float n, float m) {
+/*void drawTriangleButton(float x, float y, float w, float h, float n, float m) {
   float x1 = x;
   float y1 = y;
   float x2 = w;
@@ -136,25 +169,29 @@ void drawTriangleButton(float x, float y, float w, float h, float n, float m) {
   float x3 = n;
   float y3 = m;
   triangle(x1, y1, x2, y2, x3, y3);
-}
+}*/
 
 // Utility: point inside triangle using area comparison
-boolean pointInTriangle(float x1, float y1,float x2, float y2, float x3, float y3) {
-   float area = 0.5 * abs(onMenuX * (onMenuN - onMenuB) +onMenuM * (onMenuB - onMenuY) +onMenuA * (onMenuY - onMenuN));
-  return true;
-}
+
+// Helper: calculate area of triangle
+
+
+
 
 void mousePressed() {
-  // Triangle vertices 
-  float x1 = offMenuX;
-  float y1 = offMenuY;
-  float x2 = offMenuM;
-  float y2 = offMenuN;
-  float x3 = offMenuA;
-  float y3 = offMenuB;
+ /* boolean inside = pointInTriangle(mouseX, mouseY, offMenuX, offMenuY, offMenuM, offMenuN, offMenuA, offMenuB);
+  
+     if (inside && musicButtonOFF && !musicButtonOFF) {
+       
+    musicMenuWidth = displayWidth;
+    musicButtonOFF = true;
+  } else {
+    fill(255, 0, 0, 150); // Semi-transparent red
+  }*/
 
-  if (pointInTriangle(mouseX, mouseY,offMenuX, offMenuY, offMenuM, offMenuN, offMenuA, offMenuB)) {
-    musicButtonOFF = !musicButtonOFF; // Toggle state
+  if (pointInTriangle(mouseX, mouseY, offMenuX, offMenuY, offMenuM, offMenuN, offMenuA, offMenuB)) {
+    musicMenuWidth = displayWidth;
+      musicButtonOFF = true; // Toggle state
 
     if (musicButtonOFF) {
       musicMenuWidth = appWidth; // Expand
@@ -162,16 +199,18 @@ void mousePressed() {
       musicMenuWidth = appWidth * 1/10; // Collapse
     }
   }
-    if ( mouseX>musicMenuX && mouseX<musicMenuX+musicMenuWidth && mouseY>musicMenuY && mouseY<musicMenuY+musicMenuHeight) {
-    if ( musicButtonOFF==false ) {
-      musicMenuWidth=displayWidth;
-      musicButtonOFF=true;
+
+  if (mouseX > musicMenuX && mouseX < musicMenuX + musicMenuWidth && mouseY > musicMenuY && mouseY < musicMenuY + musicMenuHeight) {
+    if (!musicButtonOFF) {
+      musicMenuWidth = displayWidth;
+      musicButtonOFF = true;
     } else {
-      musicMenuWidth=displayWidth*1/10;
-      musicButtonOFF=true;
+      musicMenuWidth = displayWidth * 1/10;
+      musicButtonOFF = true;
     }
-    }
+  }
 }
+
 
 void keyPressed() {
   // Optional: toggle play/pause on spacebar
