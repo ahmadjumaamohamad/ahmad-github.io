@@ -46,8 +46,8 @@ void setup() {
   //rect(X, Y, Width, Height);
   //rect(X, Y, Width, Height);
   //rect(X, Y, Width, Height);
-  rect(musicMenuX, musicMenuY, musicMenuWidth, musicMenuHeight);
-  rect(displayMenuX, displaMenuY, displayMenuWidth, displayMenuHeight);
+  //rect(musicMenuX, musicMenuY, musicMenuWidth, musicMenuHeight);
+  //rect(displayMenuX, displaMenuY, displayMenuWidth, displayMenuHeight);
   //music loading
 
   minim = new Minim(this);
@@ -78,7 +78,7 @@ void mousePressed() {
       musicButtonOFF=true;
     } else {
       musicMenuWidth=displayWidth*1/10;
-      musicButtonOFF=true;
+      musicButtonOFF=false;
     }
   }
 } //End mousePressed

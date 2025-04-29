@@ -1,6 +1,8 @@
 // Triangle vertices
 int appWidth, appHeight;
-float x1, y1, x2, y2, x3, y3;
+
+float musicMenuX, musicMenuY, musicMenuWidth, musicMenuHeight;
+float displayMenuX, displaMenuY, displayMenuWidth, displayMenuHeight;
 
 float onMenuX, onMenuY, onMenuM, onMenuN, onMenuA, onMenuB;
 float offMenuX, offMenuY, offMenuM, offMenuN, offMenuA, offMenuB;
@@ -8,17 +10,23 @@ Boolean musicButtonOFF=false;
 
 void setup() {
   fullScreen();
+  background(176,224,230);
+  
+  
   appWidth = displayWidth;
   appHeight = displayHeight;
-  background(55);
-
+  
+  /*musicMenuX = displayWidth*0/10;
+  musicMenuY = displayHeight*1/10;
+  musicMenuWidth = displayWidth*2/10;
+  musicMenuHeight = displayHeight*0.9/10;*/
   // UI Layout Setup
-  offMenuX = displayWidth*0.7/10;
-  offMenuY = displayHeight*2.2/10;
-  offMenuM = displayWidth*0.06/10;
-  offMenuN = displayHeight*2.5/10;
-  offMenuA = displayWidth*0.3/10;
-  offMenuB = displayHeight*2.3/10;
+  offMenuX = displayWidth*1/10;
+  offMenuY = displayHeight*2.1/10;
+  offMenuM = displayWidth*1/10;
+  offMenuN = displayHeight*2.4/10;
+  offMenuA = displayWidth*1.1/10;
+  offMenuB = displayHeight*2.265/10;
   
   onMenuX = displayWidth*0.05/10;
   onMenuY = displayHeight*2.1/10;
@@ -28,14 +36,9 @@ void setup() {
   onMenuB = displayHeight*2.265/10;
   
   // Define triangle points (you can adjust)
-  x1 = width * 0.2;
-  y1 = height * 0.2;
-  x2 = width * 0.3;
-  y2 = height * 0.5;
-  x3 = width * 0.5;
-  y3 = height * 0.3;
+
   
-  triangle(onMenuX, onMenuY, onMenuM, onMenuN, onMenuA, onMenuB);
+  
 }
 
 void draw() {
@@ -43,25 +46,21 @@ void draw() {
   
   // Check if mouse is inside
   boolean inside = pointInTriangle(mouseX, mouseY, onMenuX, onMenuY, onMenuM, onMenuN, onMenuA, onMenuB);
-  
+  //boolean change = pointInTriangle(mouseX, mouseY, offMenuX, offMenuY, offMenuM, offMenuN, offMenuA, offMenuB);
   // Set color based on inside or outside
-  if (inside) {
-     triangle(offMenuX, offMenuY, offMenuM, offMenuN, offMenuA, offMenuB);// Semi-transparent green
-  } else {
-    triangle(onMenuX, onMenuY, onMenuM, onMenuN, onMenuA, onMenuB); // Semi-transparent red
+  if ( musicButtonOFF==false ) triangle(onMenuX, onMenuY, onMenuM, onMenuN, onMenuA, onMenuB);
+  if ( musicButtonOFF==true && inside) {
+    triangle(offMenuX, offMenuY, offMenuM, offMenuN, offMenuA, offMenuB);
+     rect(musicMenuX, musicMenuY, musicMenuWidth, musicMenuHeight);
   }
   stroke(0);
   strokeWeight(2);
   
   // Draw triangle
   //triangle(x1, y1, x2, y2, x3, y3);
-  triangle(onMenuX, onMenuY, onMenuM, onMenuN, onMenuA, onMenuB);
-  // Draw mouse point
-  fill(0);
-  noStroke();
- // ellipse(mouseX, mouseY, 10, 10);
+  //triangle(onMenuX, onMenuY, onMenuM, onMenuN, onMenuA, onMenuB);
+  //triangle(offMenuX, offMenuY, offMenuM, offMenuN, offMenuA, offMenuB);
   
-  // Show status
 
 }
 
@@ -95,17 +94,26 @@ void mousePressed() {
   } else {
     fill(255, 0, 0, 150); // Semi-transparent red
   }*/
-
-  if (pointInTriangle(mouseX, mouseY, offMenuX, offMenuY, offMenuM, offMenuN, offMenuA, offMenuB)) {
-    onMenuX = displayWidth;
-      musicButtonOFF = true; // Toggle state
-
-    if (musicButtonOFF) {
-      onMenuX = appWidth; // Expand
-    } else {
-      onMenuX = appWidth * 1/10; // Collapse
+boolean inside = pointInTriangle(mouseX, mouseY, onMenuX, onMenuY, onMenuM, onMenuN, onMenuA, onMenuB);
+  
+  if (inside) {
+    musicMenuX = displayWidth*0/10;
+    musicMenuY = displayHeight*2/10;
+    musicMenuWidth = displayWidth*1.85/10;
+    musicMenuHeight = displayHeight*0.5/10;
+    
+    offMenuX = displayWidth*1.9/10;
+    offMenuY = displayHeight*2.1/10;
+    offMenuM = displayWidth*1.9/10;
+    offMenuN = displayHeight*2.4/10;
+    offMenuA = displayWidth*2.05/10;
+    offMenuB = displayHeight*2.265/10;
+    musicButtonOFF = true; 
+  }// Toggle stat
+   else {
+    musicButtonOFF=true;
     }
-  }
+  
 
  
   

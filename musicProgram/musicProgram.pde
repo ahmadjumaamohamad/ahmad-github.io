@@ -130,19 +130,19 @@ void mouseClicked(){
 
 } //End draw onOffButtonX, onOffButtonY, onOffButtonM, onOffButtonN, onOffButtonA, onOffButtonB;
 void mousePressed() {
-   // if ( mouseX>onOffMenuX && mouseX<onOffButtonM+onOffButtonN && mouseY>onOffButtonA && mouseY<onOffButtonY+onOffButtonHeight) {
- //   if ( musicButtonOFF==false ) {
-  //    musicMenuWidth=displayWidth*1.8/10;
-  //    musicButtonOFF=true;
-   // } else if ( mouseX>onOffButtonX && mouseX<onOffButtonX+onOffButt && mouseY>onOffButtonY && mouseY<onOffButtonY+onOffButtonHeight) {
+   if ( mouseX>onOffMenuX && mouseX<onOffButtonM+onOffButtonN && mouseY>onOffButtonA && mouseY<onOffButtonY+onOffButtonHeight) {
+    if ( musicButtonOFF==false ) {
+      musicMenuWidth=displayWidth*1.8/10;
+     musicButtonOFF=true;
+    } else if ( mouseX>onOffButtonX && mouseX<onOffButtonX+onOffButt && mouseY>onOffButtonY && mouseY<onOffButtonY+onOffButtonHeight) {
       
- //   musicButtonOFF=true;
- // }
- //    else {
-  //    ;
-  //    musicButtonOFF=true;
-  //  }
- // }
+    musicButtonOFF=true;
+  }
+     else {
+      ;
+     musicButtonOFF=true;
+   }
+  }
  
 } //End mousePressed
 

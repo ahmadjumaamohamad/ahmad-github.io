@@ -40,8 +40,8 @@ void setup() {
   //
   musicMenuX = displayWidth*0/10;
   musicMenuY = displayHeight*1/10;
-  musicMenuWidth = displayWidth*2/10;
-  musicMenuHeight = displayHeight*0.9/10;
+  musicMenuWidth = displayWidth*1.8/10;
+  musicMenuHeight = displayHeight*0.7/10;
   //
   pauseX = musicMenuX + musicMenuWidth*15/20;
   pauseY = musicMenuY + musicMenuHeight*1/2;
