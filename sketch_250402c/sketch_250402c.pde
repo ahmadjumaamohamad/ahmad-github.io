@@ -114,7 +114,7 @@ void setup() {
   
   
   
-  
+  circle(loopOnceX,loopOnceY, loopOnceExtent);
   
   
   
@@ -123,8 +123,9 @@ void setup() {
   
   
   rect(musicMenuX, musicMenuY, musicMenuWidth, musicMenuHeight);
+  circle(loopOnceX,loopOnceY, loopOnceExtent);
 }
-
+/*
 void draw() {
   background(0);
 
@@ -134,14 +135,14 @@ void draw() {
  
  
  triangle(offMenuX, offMenuY, offMenuM, offMenuN, offMenuA, offMenuB);
- /*
+ 
    if (!musicButtonOFF || 
      (musicButtonOFF && mouseX > musicMenuX && mouseX < musicMenuX + musicMenuWidth &&
       mouseY > musicMenuY && mouseY < musicMenuY + musicMenuHeight)) {
     fill(255, 0, 0); // red
     drawTriangleButton(offMenuX, offMenuY, offMenuM, offMenuN, offMenuA, offMenuB);
   }
-*/
+
 }
 
 boolean pointInTriangle(float px, float py, float x1, float y1, float x2, float y2, float x3, float y3) {
@@ -161,7 +162,7 @@ float triangleArea(float x1, float y1, float x2, float y2, float x3, float y3) {
 }
 
 // Draws the play-style triangle button
-/*void drawTriangleButton(float x, float y, float w, float h, float n, float m) {
+void drawTriangleButton(float x, float y, float w, float h, float n, float m) {
   float x1 = x;
   float y1 = y;
   float x2 = w;
@@ -169,7 +170,7 @@ float triangleArea(float x1, float y1, float x2, float y2, float x3, float y3) {
   float x3 = n;
   float y3 = m;
   triangle(x1, y1, x2, y2, x3, y3);
-}*/
+}
 
 // Utility: point inside triangle using area comparison
 
@@ -179,7 +180,7 @@ float triangleArea(float x1, float y1, float x2, float y2, float x3, float y3) {
 
 
 void mousePressed() {
- /* boolean inside = pointInTriangle(mouseX, mouseY, offMenuX, offMenuY, offMenuM, offMenuN, offMenuA, offMenuB);
+  boolean inside = pointInTriangle(mouseX, mouseY, offMenuX, offMenuY, offMenuM, offMenuN, offMenuA, offMenuB);
   
      if (inside && musicButtonOFF && !musicButtonOFF) {
        
@@ -187,7 +188,7 @@ void mousePressed() {
     musicButtonOFF = true;
   } else {
     fill(255, 0, 0, 150); // Semi-transparent red
-  }*/
+  }
 
   if (pointInTriangle(mouseX, mouseY, offMenuX, offMenuY, offMenuM, offMenuN, offMenuA, offMenuB)) {
     musicMenuWidth = displayWidth;
@@ -222,4 +223,4 @@ void keyPressed() {
       playList[currentSong].play();
     }
   }
-}
+}*/

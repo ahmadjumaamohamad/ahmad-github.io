@@ -1,120 +1,203 @@
-// Triangle vertices
+import ddf.minim.*;
+import ddf.minim.analysis.*;
+import ddf.minim.effects.*;
+import ddf.minim.signals.*;
+import ddf.minim.spi.*;
+import ddf.minim.ugens.*;
+
+Minim minim;
+int numberOfSongs = 8;
+AudioPlayer[] playList = new AudioPlayer[ numberOfSongs ];
+int currentSong = numberOfSongs - numberOfSongs;
+//Global Variables
 int appWidth, appHeight;
-
-float musicMenuX, musicMenuY, musicMenuWidth, musicMenuHeight;
-float displayMenuX, displaMenuY, displayMenuWidth, displayMenuHeight;
-
-float onMenuX, onMenuY, onMenuM, onMenuN, onMenuA, onMenuB;
+PImage img;
+//music menu
 float offMenuX, offMenuY, offMenuM, offMenuN, offMenuA, offMenuB;
-Boolean musicButtonOFF=false;
+float onMenuX, onMenuY, onMenuM, onMenuN, onMenuA, onMenuB;
+float musicMenuX, musicMenuY, musicMenuWidth, musicMenuHeight;
+//music button
+float lineX, lineY, lineWidth, lineHeight;
+float loopOnceX,loopOnceY, loopOnceExtent;
+float loopInfiniteX, loopInfiniteY, loopInfiniteExtent;
+float previousX, previousY, previousExtent;
+float pauseX, pauseY, pauseExtent;
+float nextX, nextY, nextExtent;
+
+float soundEffectsX, soundEffectsY, soundEffectsWidth, soundEffectsHeight;
+
+//images;
+float rectX, rectY, rectW, rectH;
+
+//float X,Y, Width, Height;
+//float X, Y, Extent;
+
+Boolean deactiveateAutoPlay=false;
+boolean musicButtonOFF = false;
+// Global variables
 
 void setup() {
   fullScreen();
-  background(176,224,230);
-  
-  
+  background(176, 224, 230);
+
   appWidth = displayWidth;
   appHeight = displayHeight;
-  
-  /*musicMenuX = displayWidth*0/10;
-  musicMenuY = displayHeight*1/10;
-  musicMenuWidth = displayWidth*2/10;
-  musicMenuHeight = displayHeight*0.9/10;*/
-  // UI Layout Setup
-  offMenuX = displayWidth*1/10;
-  offMenuY = displayHeight*2.1/10;
-  offMenuM = displayWidth*1/10;
-  offMenuN = displayHeight*2.4/10;
-  offMenuA = displayWidth*1.1/10;
-  offMenuB = displayHeight*2.265/10;
-  
-  onMenuX = displayWidth*0.05/10;
-  onMenuY = displayHeight*2.1/10;
-  onMenuM = displayWidth*0.05/10;
-  onMenuN = displayHeight*2.4/10;
-  onMenuA = displayWidth*0.2/10;
-  onMenuB = displayHeight*2.265/10;
-  
-  // Define triangle points (you can adjust)
 
+  // Initial triangle coordinates for ON (left) and OFF (right) buttons
+  onMenuX = displayWidth * 0.05 / 10;
+  onMenuY = displayHeight * 2.1 / 10;
+  onMenuM = displayWidth * 0.05 / 10;
+  onMenuN = displayHeight * 2.4 / 10;
+  onMenuA = displayWidth * 0.2 / 10;
+  onMenuB = displayHeight * 2.265 / 10;
+
+  offMenuX = displayWidth * 1 / 10;
+  offMenuY = displayHeight * 2.1 / 10;
+  offMenuM = displayWidth * 1 / 10;
+  offMenuN = displayHeight * 2.4 / 10;
+  offMenuA = displayWidth * 1.1 / 10;
+  offMenuB = displayHeight * 2.265 / 10;
+  
+  img = loadImage("dice.GIF"); // Place image in the "data" folder
+  rectX = 100;
+  rectY = 100;
+  rectW = 200;
+  rectH = 150;
+  
+
+  // Load music
+  minim = new Minim(this);
+  String musicPathway = "Music/";
+  String songName = "Cycles";
+  String fileExtension = ".mp3";
+  String musicDirectory = "../../" + musicPathway;
+  String filePath = musicDirectory + songName + fileExtension;
+
+  playList[currentSong] = minim.loadFile(filePath);
+  println("Loaded: " + filePath);
+  
+  
   
   
 }
 
 void draw() {
-  
-  
-  // Check if mouse is inside
-  boolean inside = pointInTriangle(mouseX, mouseY, onMenuX, onMenuY, onMenuM, onMenuN, onMenuA, onMenuB);
-  //boolean change = pointInTriangle(mouseX, mouseY, offMenuX, offMenuY, offMenuM, offMenuN, offMenuA, offMenuB);
-  // Set color based on inside or outside
-  if ( musicButtonOFF==false ) triangle(onMenuX, onMenuY, onMenuM, onMenuN, onMenuA, onMenuB);
-  if ( musicButtonOFF==true && inside) {
-    triangle(offMenuX, offMenuY, offMenuM, offMenuN, offMenuA, offMenuB);
-     rect(musicMenuX, musicMenuY, musicMenuWidth, musicMenuHeight);
-  }
+  background(176, 224, 230); // Redraw background to avoid overdraw
+
   stroke(0);
   strokeWeight(2);
-  
-  // Draw triangle
-  //triangle(x1, y1, x2, y2, x3, y3);
-  //triangle(onMenuX, onMenuY, onMenuM, onMenuN, onMenuA, onMenuB);
-  //triangle(offMenuX, offMenuY, offMenuM, offMenuN, offMenuA, offMenuB);
-  
+  fill(255, 255, 255);
 
+  if (!musicButtonOFF) {
+    // Draw ON triangle
+    triangle(onMenuX, onMenuY, onMenuM, onMenuN, onMenuA, onMenuB);
+  } else {
+    // Draw OFF triangle and menu rectangle
+    triangle(offMenuX, offMenuY, offMenuM, offMenuN, offMenuA, offMenuB);
+    rect(musicMenuX, musicMenuY, musicMenuWidth, musicMenuHeight);
+    PImage cropped = img.get();  // Duplicate image
+    cropped.resize((int)rectW, (int)rectH);
+    // Draw image as the rectangle
+    image(cropped, musicMenuX, musicMenuY, musicMenuWidth, musicMenuHeight);
+    
+    circle(loopOnceX,loopOnceY, loopOnceExtent);
+    circle(loopInfiniteX, loopInfiniteY, loopInfiniteExtent);
+    circle(nextX, nextY, nextExtent);
+    circle( pauseX, pauseY, pauseExtent);
+    circle(previousX, previousY, previousExtent);
+    strokeWeight(1.6);
+    rect(lineX, lineY, lineWidth, lineHeight);
+    
+
+    
+    
+  }
+  
 }
 
-// Utility: check if point is inside triangle
-boolean pointInTriangle(float px, float py, float x1, float y1, float x2, float y2, float x3, float y3) {
+// Mouse interaction
+void mousePressed() {
+  boolean clickedOn = pointInTriangle(mouseX, mouseY, onMenuX, onMenuY, onMenuM, onMenuN, onMenuA, onMenuB);
+  boolean clickedOff = pointInTriangle(mouseX, mouseY, offMenuX, offMenuY, offMenuM, offMenuN, offMenuA, offMenuB);
+
+  if (clickedOn) {
+    // Activate music menu
+    musicMenuX = displayWidth * 0 / 10;
+    musicMenuY = displayHeight * 2 / 10;
+    musicMenuWidth = displayWidth * 1.7 / 10;
+    musicMenuHeight = displayHeight * 0.54 / 10;
+
+    // Set new triangle for OFF button
+    offMenuX = displayWidth * 1.75 / 10;
+    offMenuY = displayHeight * 2.1 / 10;
+    offMenuM = displayWidth * 1.75 / 10;
+    offMenuN = displayHeight * 2.4 / 10;
+    offMenuA = displayWidth * 1.9 / 10;
+    offMenuB = displayHeight * 2.265 / 10;
+    
+    float cx = musicMenuX;
+    float cy = musicMenuY;
+    float cw = musicMenuWidth;
+    float ch = musicMenuHeight;
+    
+    lineX = cx + cw * 0.02;
+    lineY = cy + ch * 0.84;
+    lineWidth = cw * 0.95;
+    lineHeight = ch * 0.1;
+
+    pauseX = cx + cw * 0.725;
+    pauseY = cy + ch * 0.447;
+    pauseExtent = cw * 0.109;
+
+    nextX = cx + cw * 0.87;
+    nextY = cy + ch * 0.46;
+    nextExtent = cw * 0.102;
+
+    previousX = cx + cw * 0.58;
+    previousY = cy + ch * 0.46;
+    previousExtent = cw * 0.102;
+
+    loopInfiniteX = cx + cw * 0.35;
+    loopInfiniteY = cy + ch * 0.45;
+    loopInfiniteExtent = cw * 0.109;
+
+    loopOnceX = cx + cw * 0.20;
+    loopOnceY = cy + ch * 0.45;
+    loopOnceExtent = cw * 0.109;
+
+    soundEffectsX = cx + cw;
+    soundEffectsY = cy + ch;
+    soundEffectsWidth = cw * 0.5;
+    soundEffectsHeight = ch * 0.5;
+  
+   
+
+    musicButtonOFF = true;
+  } else if (clickedOff) {
+    // Deactivate music menu 
+    musicButtonOFF = false;
+  }
+}
+
+// Utility: check if a point is inside a triangle
+boolean pointInTriangle(float px, float py,
+                        float x1, float y1,
+                        float x2, float y2,
+                        float x3, float y3) {
   float areaTotal = triangleArea(x1, y1, x2, y2, x3, y3);
   float area1 = triangleArea(px, py, x2, y2, x3, y3);
   float area2 = triangleArea(x1, y1, px, py, x3, y3);
   float area3 = triangleArea(x1, y1, x2, y2, px, py);
-  
+
   float sumAreas = area1 + area2 + area3;
-  
-  return abs(areaTotal - sumAreas) < 0.01; // Small tolerance
+  return abs(areaTotal - sumAreas) < 0.01;
 }
 
-// Helper: area of triangle
-float triangleArea(float x1, float y1, float x2, float y2, float x3, float y3) {
+// Helper: compute area of triangle
+float triangleArea(float x1, float y1,
+                   float x2, float y2,
+                   float x3, float y3) {
   return 0.5 * abs(x1 * (y2 - y3) +
                    x2 * (y3 - y1) +
                    x3 * (y1 - y2));
-}
-
-
-void mousePressed() {
- /* boolean inside = pointInTriangle(mouseX, mouseY, offMenuX, offMenuY, offMenuM, offMenuN, offMenuA, offMenuB);
-  
-     if (inside && musicButtonOFF && !musicButtonOFF) {
-       
-    musicMenuWidth = displayWidth;
-    musicButtonOFF = true;
-  } else {
-    fill(255, 0, 0, 150); // Semi-transparent red
-  }*/
-boolean inside = pointInTriangle(mouseX, mouseY, onMenuX, onMenuY, onMenuM, onMenuN, onMenuA, onMenuB);
-  
-  if (inside) {
-    musicMenuX = displayWidth*0/10;
-    musicMenuY = displayHeight*2/10;
-    musicMenuWidth = displayWidth*1.85/10;
-    musicMenuHeight = displayHeight*0.5/10;
-    
-    offMenuX = displayWidth*1.9/10;
-    offMenuY = displayHeight*2.1/10;
-    offMenuM = displayWidth*1.9/10;
-    offMenuN = displayHeight*2.4/10;
-    offMenuA = displayWidth*2.05/10;
-    offMenuB = displayHeight*2.265/10;
-    musicButtonOFF = true; 
-  }// Toggle stat
-   else {
-    musicButtonOFF=true;
-    }
-  
-
- 
-  
 }
