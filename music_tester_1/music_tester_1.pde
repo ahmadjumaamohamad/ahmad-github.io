@@ -1,22 +1,24 @@
-PImage img;
-float rectX, rectY, rectW, rectH;
-
+PImage[] gif;
+int numberOfFrames;
+int f;
 void setup() {
-  size(400, 400);
-  img = loadImage("loopImage.JPG"); // Place image in the "data" folder
-  rectX = 100;
-  rectY = 100;
-  rectW = 200;
-  rectH = 150;
+  numberOfFrames = 50;
+  gif = new PImage[ numberOfFrames ];
+  
+  int i = 0;
+  while (i <  numberOfFrames  ) {
+  gif [i] = loadImage("frame_"+i+"_delay-0.04s.gif");
+
+    i=i+1;
+  }
+  
+
+ /* */
+  size(800,800);
+  
 }
 
 void draw() {
-  background(255);
-
-  // Resize image to fit rectangle area
-  PImage cropped = img.get();  // Duplicate image
-  cropped.resize((int)rectW, (int)rectH);
-
-  // Draw image as the rectangle
-  image(cropped, rectX, rectY);
+  image(gif[f], 0, 0, width, height);
+ // f = f +1;
 }
