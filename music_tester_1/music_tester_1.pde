@@ -1,7 +1,7 @@
 PImage[] frames;
-int totalFrames = 10;  // Change this to match your number of frames
+int totalFrames = 164;  // Change this to match your number of frames
 int currentFrame = 0;
-int frameDelay = 5;  // Change this to control speed
+float frameDelay = 2;  // Change this to control speed
 int frameCounter = 0;
 
 void setup() {
@@ -9,7 +9,7 @@ void setup() {
   frames = new PImage[totalFrames];
   
   for (int i = 0; i < totalFrames; i++) {
-    String filename = "frame_" + nf(i + 1) + "_delay-0.04s.png";
+    String filename = "frame_" + (i + 1) + "_delay-0.07s.png";
     frames[i] = loadImage(filename);
   }
 }

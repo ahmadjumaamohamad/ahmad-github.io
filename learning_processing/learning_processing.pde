@@ -28,6 +28,12 @@ float soundEffectsX, soundEffectsY, soundEffectsWidth, soundEffectsHeight;
 
 //images;
 float rectX, rectY, rectW, rectH;
+//gif
+PImage[] frames;
+int totalFrames = 47;  // Change this to match your number of frames
+int currentFrame = 0;
+float frameDelay = 2;  // Change this to control speed
+int frameCounter = 0;
 
 //float X,Y, Width, Height;
 //float X, Y, Extent;
@@ -58,12 +64,18 @@ void setup() {
   offMenuA = displayWidth * 1.1 / 10;
   offMenuB = displayHeight * 2.265 / 10;
   
-  img = loadImage("dice.GIF"); // Place image in the "data" folder
+  
   rectX = 100;
   rectY = 100;
   rectW = 200;
   rectH = 150;
   
+   frames = new PImage[totalFrames];
+  
+   for (int i = 0; i < totalFrames; i++) {
+     String filename = "frame_" + nf(i + 1) + "_delay-0.07s.png";
+     frames[i] = loadImage(filename);
+   }
 
   // Load music
   minim = new Minim(this);
@@ -87,19 +99,25 @@ void draw() {
   stroke(0);
   strokeWeight(2);
   fill(255, 255, 255);
+  
+  //image(frames[currentFrame], 0, 0, width, height);
 
+  frameCounter++;
+  if (frameCounter >= frameDelay) {
+    currentFrame = (currentFrame + 1) % totalFrames;
+    frameCounter = 0;
+  }
+   
   if (!musicButtonOFF) {
     // Draw ON triangle
     triangle(onMenuX, onMenuY, onMenuM, onMenuN, onMenuA, onMenuB);
   } else {
-    // Draw OFF triangle and menu rectangle
-    triangle(offMenuX, offMenuY, offMenuM, offMenuN, offMenuA, offMenuB);
-    rect(musicMenuX, musicMenuY, musicMenuWidth, musicMenuHeight);
-    PImage cropped = img.get();  // Duplicate image
-    cropped.resize((int)rectW, (int)rectH);
-    // Draw image as the rectangle
-    image(cropped, musicMenuX, musicMenuY, musicMenuWidth, musicMenuHeight);
     
+    // Draw off and on triangle and menu rectangle
+    
+    image(frames[currentFrame], musicMenuX, musicMenuY, musicMenuWidth, musicMenuHeight);
+    triangle(offMenuX, offMenuY, offMenuM, offMenuN, offMenuA, offMenuB);
+    //rect(musicMenuX, musicMenuY, musicMenuWidth, musicMenuHeight);    
     circle(loopOnceX,loopOnceY, loopOnceExtent);
     circle(loopInfiniteX, loopInfiniteY, loopInfiniteExtent);
     circle(nextX, nextY, nextExtent);
@@ -180,10 +198,7 @@ void mousePressed() {
 }
 
 // Utility: check if a point is inside a triangle
-boolean pointInTriangle(float px, float py,
-                        float x1, float y1,
-                        float x2, float y2,
-                        float x3, float y3) {
+boolean pointInTriangle(float px, float py, float x1, float y1, float x2, float y2,float x3, float y3) {
   float areaTotal = triangleArea(x1, y1, x2, y2, x3, y3);
   float area1 = triangleArea(px, py, x2, y2, x3, y3);
   float area2 = triangleArea(x1, y1, px, py, x3, y3);
@@ -194,9 +209,7 @@ boolean pointInTriangle(float px, float py,
 }
 
 // Helper: compute area of triangle
-float triangleArea(float x1, float y1,
-                   float x2, float y2,
-                   float x3, float y3) {
+float triangleArea(float x1, float y1, float x2, float y2, float x3, float y3) {
   return 0.5 * abs(x1 * (y2 - y3) +
                    x2 * (y3 - y1) +
                    x3 * (y1 - y2));
