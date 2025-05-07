@@ -11,7 +11,6 @@ AudioPlayer[] playList = new AudioPlayer[ numberOfSongs ];
 int currentSong = numberOfSongs - numberOfSongs;
 //Global Variables
 int appWidth, appHeight;
-PImage img;
 //music menu
 float offMenuX, offMenuY, offMenuM, offMenuN, offMenuA, offMenuB;
 float onMenuX, onMenuY, onMenuM, onMenuN, onMenuA, onMenuB;
@@ -27,14 +26,9 @@ float nextX, nextY, nextExtent;
 float soundEffectsX, soundEffectsY, soundEffectsWidth, soundEffectsHeight;
 
 //images;
-float rectX, rectY, rectW, rectH;
-//gif
-PImage[] frames;
-int totalFrames = 47;  // Change this to match your number of frames
-int currentFrame = 0;
-float frameDelay = 2;  // Change this to control speed
-int frameCounter = 0;
+PImage img;
 
+float rectX, rectY, rectW, rectH;
 //float X,Y, Width, Height;
 //float X, Y, Extent;
 
@@ -69,13 +63,13 @@ void setup() {
   rectY = 100;
   rectW = 200;
   rectH = 150;
-  
-   frames = new PImage[totalFrames];
-  
-   for (int i = 0; i < totalFrames; i++) {
-     String filename = "frame_" + nf(i + 1) + "_delay-0.07s.png";
-     frames[i] = loadImage(filename);
-   }
+  img = loadImage("stopButton.jpg");
+  frames = new PImage[totalFrames];
+
+  for (int i = 0; i < totalFrames; i++) {
+    String filename = "frame_" + (i + 1) + "_delay-0.04s.png";
+    frames[i] = loadImage(filename);
+  }
 
   // Load music
   minim = new Minim(this);
@@ -90,23 +84,18 @@ void setup() {
   
   
   
-  
 }
 
 void draw() {
   background(176, 224, 230); // Redraw background to avoid overdraw
-
+  PImage frameToDisplay = getNextFrame();
   stroke(0);
   strokeWeight(2);
   fill(255, 255, 255);
   
-  //image(frames[currentFrame], 0, 0, width, height);
+  //image(frameToDisplay, x, y, width, height);
 
-  frameCounter++;
-  if (frameCounter >= frameDelay) {
-    currentFrame = (currentFrame + 1) % totalFrames;
-    frameCounter = 0;
-  }
+  
    
   if (!musicButtonOFF) {
     // Draw ON triangle
@@ -115,12 +104,13 @@ void draw() {
     
     // Draw off and on triangle and menu rectangle
     
-    image(frames[currentFrame], musicMenuX, musicMenuY, musicMenuWidth, musicMenuHeight);
+   image(frameToDisplay,musicMenuX, musicMenuY, musicMenuWidth, musicMenuHeight);
     triangle(offMenuX, offMenuY, offMenuM, offMenuN, offMenuA, offMenuB);
     //rect(musicMenuX, musicMenuY, musicMenuWidth, musicMenuHeight);    
     circle(loopOnceX,loopOnceY, loopOnceExtent);
     circle(loopInfiniteX, loopInfiniteY, loopInfiniteExtent);
     circle(nextX, nextY, nextExtent);
+    image(img, pauseX, pauseY, pauseExtent);
     circle( pauseX, pauseY, pauseExtent);
     circle(previousX, previousY, previousExtent);
     strokeWeight(1.6);
