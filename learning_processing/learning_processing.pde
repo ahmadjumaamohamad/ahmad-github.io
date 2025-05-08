@@ -26,7 +26,7 @@ float nextX, nextY, nextExtent;
 float soundEffectsX, soundEffectsY, soundEffectsWidth, soundEffectsHeight;
 
 //images;
-PImage img;
+PShape bot;
 
 float rectX, rectY, rectW, rectH;
 //float X,Y, Width, Height;
@@ -63,7 +63,10 @@ void setup() {
   rectY = 100;
   rectW = 200;
   rectH = 150;
-  img = loadImage("stopButton.jpg");
+  //svg
+  bot = loadShape("stopButton.svg");
+  
+  //gif
   frames = new PImage[totalFrames];
 
   for (int i = 0; i < totalFrames; i++) {
@@ -110,15 +113,13 @@ void draw() {
     circle(loopOnceX,loopOnceY, loopOnceExtent);
     circle(loopInfiniteX, loopInfiniteY, loopInfiniteExtent);
     circle(nextX, nextY, nextExtent);
-    image(img, pauseX, pauseY, pauseExtent);
+    
+    shape(bot, nextX, nextY, calculate(nextExtent));
     circle( pauseX, pauseY, pauseExtent);
     circle(previousX, previousY, previousExtent);
     strokeWeight(1.6);
     rect(lineX, lineY, lineWidth, lineHeight);
-    
-
-    
-    
+        
   }
   
 }
