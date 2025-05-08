@@ -1,26 +1,31 @@
-PImage[] frames;
-int totalFrames = 164;  // Change this to match your number of frames
+PImage[] frames; 
+int totalFrames = 164;
 int currentFrame = 0;
-float frameDelay = 2;  // Change this to control speed
+float frameDelay = 2;
 int frameCounter = 0;
 
 void setup() {
-  size(800, 600);  // Match your frame size
+  size(800, 600);
   frames = new PImage[totalFrames];
-  
+
   for (int i = 0; i < totalFrames; i++) {
     String filename = "frame_" + (i + 1) + "_delay-0.07s.png";
     frames[i] = loadImage(filename);
   }
 }
 
-void draw() {
-  background(0);
-  image(frames[currentFrame], 0, 0, width, height);
-  
+// Update frame logic and return the current frame image
+PImage getNextFrame() {
   frameCounter++;
   if (frameCounter >= frameDelay) {
     currentFrame = (currentFrame + 1) % totalFrames;
     frameCounter = 0;
   }
+  return frames[currentFrame];
+}
+
+void draw() {
+  background(0);
+  PImage frameToDisplay = getNextFrame();
+  image(frameToDisplay, 0, 0, width, height);
 }
