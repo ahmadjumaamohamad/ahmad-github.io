@@ -26,7 +26,8 @@ float nextX, nextY, nextExtent;
 float soundEffectsX, soundEffectsY, soundEffectsWidth, soundEffectsHeight;
 
 //images;
-PShape bot;
+PImage[] images;
+int totalImages = 100; 
 
 float rectX, rectY, rectW, rectH;
 //float X,Y, Width, Height;
@@ -63,12 +64,18 @@ void setup() {
   rectY = 100;
   rectW = 200;
   rectH = 150;
-  //svg
-  bot = loadShape("stopButton.svg");
+  //img
+  String path = sketchPath("image");
+  File folder = new File(path);
+  String[] filenames = folder.list((dir, name) -> name.endsWith(".png"));
   
-  //gif
+  images = new PImage[filenames.length];
+  
+  for (int i = 0; i < filenames.length; i++) {
+    images[i] = loadImage(filenames[i]);
+  }
+//gif
   frames = new PImage[totalFrames];
-
   for (int i = 0; i < totalFrames; i++) {
     String filename = "frame_" + (i + 1) + "_delay-0.04s.png";
     frames[i] = loadImage(filename);
@@ -90,6 +97,7 @@ void setup() {
 }
 
 void draw() {
+  
   background(176, 224, 230); // Redraw background to avoid overdraw
   PImage frameToDisplay = getNextFrame();
   stroke(0);
@@ -113,9 +121,8 @@ void draw() {
     circle(loopOnceX,loopOnceY, loopOnceExtent);
     circle(loopInfiniteX, loopInfiniteY, loopInfiniteExtent);
     circle(nextX, nextY, nextExtent);
-    
-    shape(bot, nextX, nextY, calculate(nextExtent));
-    circle( pauseX, pauseY, pauseExtent);
+ //   circle(pauseX, pauseY, pauseExtent);  
+    image(images[1], pauseX - pauseExtent / 2, pauseY - pauseExtent / 2, pauseExtent, pauseExtent);
     circle(previousX, previousY, previousExtent);
     strokeWeight(1.6);
     rect(lineX, lineY, lineWidth, lineHeight);
