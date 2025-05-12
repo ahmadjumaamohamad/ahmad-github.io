@@ -27,7 +27,7 @@ float soundEffectsX, soundEffectsY, soundEffectsWidth, soundEffectsHeight;
 
 //images;
 PImage[] images;
-int totalImages = 100; 
+int totalImages = 10; 
 
 float rectX, rectY, rectW, rectH;
 //float X,Y, Width, Height;
@@ -60,10 +60,7 @@ void setup() {
   offMenuB = displayHeight * 2.265 / 10;
   
   
-  rectX = 100;
-  rectY = 100;
-  rectW = 200;
-  rectH = 150;
+ 
   //img
   String path = sketchPath("image");
   File folder = new File(path);
@@ -104,10 +101,7 @@ void draw() {
   strokeWeight(2);
   fill(255, 255, 255);
   
-  //image(frameToDisplay, x, y, width, height);
-
-  
-   
+  //image(frameToDisplay, x, y, width, height);  
   if (!musicButtonOFF) {
     // Draw ON triangle
     triangle(onMenuX, onMenuY, onMenuM, onMenuN, onMenuA, onMenuB);
@@ -115,17 +109,25 @@ void draw() {
     
     // Draw off and on triangle and menu rectangle
     
-   image(frameToDisplay,musicMenuX, musicMenuY, musicMenuWidth, musicMenuHeight);
+    image(frameToDisplay,musicMenuX, musicMenuY, musicMenuWidth, musicMenuHeight);
     triangle(offMenuX, offMenuY, offMenuM, offMenuN, offMenuA, offMenuB);
-    //rect(musicMenuX, musicMenuY, musicMenuWidth, musicMenuHeight);    
-    circle(loopOnceX,loopOnceY, loopOnceExtent);
-    circle(loopInfiniteX, loopInfiniteY, loopInfiniteExtent);
-    circle(nextX, nextY, nextExtent);
- //   circle(pauseX, pauseY, pauseExtent);  
-    image(images[1], pauseX - pauseExtent / 2, pauseY - pauseExtent / 2, pauseExtent, pauseExtent);
-    circle(previousX, previousY, previousExtent);
     strokeWeight(1.6);
     rect(lineX, lineY, lineWidth, lineHeight);
+    noStroke();
+    fill(2, 0, 0, 2); 
+    //rect(musicMenuX, musicMenuY, musicMenuWidth, musicMenuHeight);    
+    circle(loopOnceX,loopOnceY, loopOnceExtent);
+      image(images[3], loopOnceX - loopOnceExtent / 2, loopOnceY - loopOnceExtent / 2, loopOnceExtent, loopOnceExtent);
+    circle(loopInfiniteX, loopInfiniteY, loopInfiniteExtent);
+      image(images[3], loopInfiniteX - loopInfiniteExtent / 2, loopInfiniteY - loopInfiniteExtent / 2, loopInfiniteExtent, loopInfiniteExtent);
+    circle(nextX, nextY, nextExtent);
+      image(images[3], nextX - nextExtent / 2, nextY - nextExtent / 2, nextExtent, nextExtent);
+    circle(pauseX, pauseY, pauseExtent);  
+      image(images[0], pauseX - pauseExtent / 2, pauseY - pauseExtent / 2, pauseExtent, pauseExtent);
+    circle(previousX, previousY, previousExtent);
+    image(images[0], previousX - previousExtent / 2, previousY - previousExtent / 2, previousExtent, previousExtent);
+    fill(2, 0, 0, 2); 
+
         
   }
   
