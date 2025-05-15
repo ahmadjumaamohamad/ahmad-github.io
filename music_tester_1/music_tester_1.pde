@@ -9,7 +9,7 @@ void setup() {
   frames = new PImage[totalFrames];
 
   for (int i = 0; i < totalFrames; i++) {
-    String filename = "frame_" + (i + 1) + "_delay-0.07s.png";
+    String filename = "" + (i + 1) + "_delay-0.04s.png";
     frames[i] = loadImage(filename);
   }
 }
