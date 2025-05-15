@@ -104,31 +104,33 @@ void draw() {
   //image(frameToDisplay, x, y, width, height);  
   if (!musicButtonOFF) {
     // Draw ON triangle
+    
     triangle(onMenuX, onMenuY, onMenuM, onMenuN, onMenuA, onMenuB);
   } else {
-    
     // Draw off and on triangle and menu rectangle
-    
+    strokeWeight(6);
+    rect(musicMenuX, musicMenuY, musicMenuWidth, musicMenuHeight);
     image(frameToDisplay,musicMenuX, musicMenuY, musicMenuWidth, musicMenuHeight);
+    strokeWeight(2);
     triangle(offMenuX, offMenuY, offMenuM, offMenuN, offMenuA, offMenuB);
     strokeWeight(1.6);
     rect(lineX, lineY, lineWidth, lineHeight);
     noStroke();
+    
     fill(2, 0, 0, 2); 
     //rect(musicMenuX, musicMenuY, musicMenuWidth, musicMenuHeight);    
     circle(loopOnceX,loopOnceY, loopOnceExtent);
-      image(images[3], loopOnceX - loopOnceExtent / 2, loopOnceY - loopOnceExtent / 2, loopOnceExtent, loopOnceExtent);
+      image(images[4], loopOnceX - loopOnceExtent / 2, loopOnceY - loopOnceExtent / 2, loopOnceExtent, loopOnceExtent);
     circle(loopInfiniteX, loopInfiniteY, loopInfiniteExtent);
-      image(images[3], loopInfiniteX - loopInfiniteExtent / 2, loopInfiniteY - loopInfiniteExtent / 2, loopInfiniteExtent, loopInfiniteExtent);
+      image(images[5], loopInfiniteX - loopInfiniteExtent / 2, loopInfiniteY - loopInfiniteExtent / 2, loopInfiniteExtent, loopInfiniteExtent);
     circle(nextX, nextY, nextExtent);
-      image(images[3], nextX - nextExtent / 2, nextY - nextExtent / 2, nextExtent, nextExtent);
+      image(images[1], nextX - nextExtent / 2, nextY - nextExtent / 2, nextExtent, nextExtent);
     circle(pauseX, pauseY, pauseExtent);  
-      image(images[0], pauseX - pauseExtent / 2, pauseY - pauseExtent / 2, pauseExtent, pauseExtent);
+      image(images[2], pauseX - pauseExtent / 2, pauseY - pauseExtent / 2, pauseExtent, pauseExtent);
     circle(previousX, previousY, previousExtent);
-    image(images[0], previousX - previousExtent / 2, previousY - previousExtent / 2, previousExtent, previousExtent);
+    image(images[3], previousX - previousExtent / 2, previousY - previousExtent / 2, previousExtent, previousExtent);
     fill(2, 0, 0, 2); 
-
-        
+    strokeWeight(2);
   }
   
 }
@@ -137,7 +139,7 @@ void draw() {
 void mousePressed() {
   boolean clickedOn = pointInTriangle(mouseX, mouseY, onMenuX, onMenuY, onMenuM, onMenuN, onMenuA, onMenuB);
   boolean clickedOff = pointInTriangle(mouseX, mouseY, offMenuX, offMenuY, offMenuM, offMenuN, offMenuA, offMenuB);
-
+  
   if (clickedOn) {
     // Activate music menu
     musicMenuX = displayWidth * 0 / 10;
@@ -187,14 +189,17 @@ void mousePressed() {
     soundEffectsY = cy + ch;
     soundEffectsWidth = cw * 0.5;
     soundEffectsHeight = ch * 0.5;
-  
-   
-
+    
     musicButtonOFF = true;
   } else if (clickedOff) {
     // Deactivate music menu 
     musicButtonOFF = false;
   }
+  
+  
+  
+  
+  
 }
 
 // Utility: check if a point is inside a triangle

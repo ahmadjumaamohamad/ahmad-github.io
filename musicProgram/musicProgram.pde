@@ -34,6 +34,8 @@ float nextX, nextY, nextExtent;
 float soundEffectsX, soundEffectsY, soundEffectsWidth, soundEffectsHeight;
 Boolean musicButtonOFF=false;
 Boolean deactiveateAutoPlay=false;
+
+boolean circleOver = false;
 //
 void setup() {
   fullScreen();
@@ -94,7 +96,7 @@ void setup() {
   String Cycles = "Cycles";
   String fileExtension_mp3 = ".mp3";
   
-  String musicDirectory = "../" + musicPathway;
+  String musicDirectory = "../../" + musicPathway;
   String file = musicDirectory + Cycles + fileExtension_mp3;
   println( file );
  // playList[ currentSong ] = minim.loadFile( file ); // Error: Verify library installed, sketch / inport libarary.
@@ -106,12 +108,12 @@ void setup() {
 
 
 void draw() {
-  
-  if ( playList[currentSong].isPlaying()==false && deactiveateAutoPlay==false){
+  rect(musicMenuX, musicMenuY, musicMenuWidth, musicMenuHeight);
+  /*if ( playList[currentSong].isPlaying()==false && deactiveateAutoPlay==false){
     playList[currentSong].loop(0);
-  }
+  }*/
 
-
+  rect(musicMenuX, musicMenuY, musicMenuWidth, musicMenuHeight);
   if ( musicButtonOFF==false ) rect(musicMenuX, musicMenuY, musicMenuWidth, musicMenuHeight);
   if ( musicButtonOFF==true && mouseX>musicMenuX && mouseX<musicMenuX+musicMenuWidth && mouseY>musicMenuY && mouseY<musicMenuY+musicMenuHeight ) {
 
@@ -126,24 +128,26 @@ void draw() {
   }
 //
 }
-void mouseClicked(){
+void mousePressed(){
 
-} //End draw onOffButtonX, onOffButtonY, onOffButtonM, onOffButtonN, onOffButtonA, onOffButtonB;
-void mousePressed() {
-   if ( mouseX>onOffMenuX && mouseX<onOffButtonM+onOffButtonN && mouseY>onOffButtonA && mouseY<onOffButtonY+onOffButtonHeight) {
+ //End draw musicMenuX, musicMenuY, musicMenuWidth, musicMenuHeight
+   if (mouseX> musicMenuX && mouseX<musicMenuX+musicMenuWidth && mouseY>musicMenuY && mouseY<musicMenuY+musicMenuHeight) {
     if ( musicButtonOFF==false ) {
       musicMenuWidth=displayWidth*1.8/10;
      musicButtonOFF=true;
-    } else if ( mouseX>onOffButtonX && mouseX<onOffButtonX+onOffButt && mouseY>onOffButtonY && mouseY<onOffButtonY+onOffButtonHeight) {
+    } else if ( mouseX> musicMenuX && mouseX<musicMenuX+musicMenuWidth && mouseY>musicMenuY && mouseY<musicMenuY+musicMenuHeight) {
       
-    musicButtonOFF=true;
+    musicButtonOFF=false;
   }
      else {
-      ;
+      
      musicButtonOFF=true;
    }
   }
- 
+    if (circleOver) {
+    currentColor = circleColor;
+  }
+
 } //End mousePressed
 
 
@@ -154,4 +158,21 @@ void mouseMoved(){
 //
 void keyPressed() {} //End keyPressed
 //
+boolean circleT = overCircle(loopOnceX, loopOnceY, loopOnceExtent);
+void circleValues(float x, float y) {
+  if (circleT) {
+    circleOver = true;
+  } else {
+    circleOver = false;
+  }
+}
 // End Main Program
+boolean overCircle(float x, float y, float diameter) {
+  float disX = x - mouseX;
+  float disY = y - mouseY;
+  if (sqrt(sq(disX) + sq(disY)) < diameter/2 ) {
+    return true;
+  } else {
+    return false;
+  }
+}
