@@ -35,7 +35,15 @@ float soundEffectsX, soundEffectsY, soundEffectsWidth, soundEffectsHeight;
 Boolean musicButtonOFF=false;
 Boolean deactiveateAutoPlay=false;
 
+  // Position of square button
+float circleX, circleY;  // Position of circle button
+  // Diameter of rect
+  // Diameter of circle
+color circleColor, baseColor;
+color circleHighlight;
+color currentColor;
 boolean circleOver = false;
+
 //
 void setup() {
   fullScreen();

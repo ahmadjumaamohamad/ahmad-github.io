@@ -16,6 +16,11 @@ float offMenuX, offMenuY, offMenuM, offMenuN, offMenuA, offMenuB;
 float onMenuX, onMenuY, onMenuM, onMenuN, onMenuA, onMenuB;
 float musicMenuX, musicMenuY, musicMenuWidth, musicMenuHeight;
 //music button
+float cx = musicMenuX;
+float cy = musicMenuY;
+float cw = musicMenuWidth;
+float ch = musicMenuHeight;
+
 float lineX, lineY, lineWidth, lineHeight;
 float loopOnceX,loopOnceY, loopOnceExtent;
 float loopInfiniteX, loopInfiniteY, loopInfiniteExtent;
@@ -36,6 +41,7 @@ float rectX, rectY, rectW, rectH;
 Boolean deactiveateAutoPlay=false;
 boolean musicButtonOFF = false;
 // Global variables
+  // Diameter of circle
 
 void setup() {
   fullScreen();
@@ -90,13 +96,13 @@ void setup() {
   println("Loaded: " + filePath);
   
   
-  
+
 }
 
 void draw() {
-  
   background(176, 224, 230); // Redraw background to avoid overdraw
   PImage frameToDisplay = getNextFrame();
+  update(mouseX, mouseY);
   stroke(0);
   strokeWeight(2);
   fill(255, 255, 255);
@@ -107,10 +113,28 @@ void draw() {
     
     triangle(onMenuX, onMenuY, onMenuM, onMenuN, onMenuA, onMenuB);
   } else {
+if (circleOver) {
+  loopOnceExtent = expandCircle(loopOnceExtent);
+  if (isExpanding) {
+    if (loopOnceExtent < targetExtent) {
+      loopOnceExtent += expansionSpeed;
+      if (loopOnceExtent >= targetExtent) {
+        loopOnceExtent = targetExtent;
+        isExpanding = false;
+      }
+    }
+} }
+  else {
+    isExpanding = false;
+  }
+
+    
+    stroke(0);
+    circle(loopOnceX,loopOnceY, loopOnceExtent);
     // Draw off and on triangle and menu rectangle
     strokeWeight(6);
     rect(musicMenuX, musicMenuY, musicMenuWidth, musicMenuHeight);
-    image(frameToDisplay,musicMenuX, musicMenuY, musicMenuWidth, musicMenuHeight);
+   // image(frameToDisplay,musicMenuX, musicMenuY, musicMenuWidth, musicMenuHeight);
     strokeWeight(2);
     triangle(offMenuX, offMenuY, offMenuM, offMenuN, offMenuA, offMenuB);
     strokeWeight(1.6);
@@ -132,6 +156,7 @@ void draw() {
     fill(2, 0, 0, 2); 
     strokeWeight(2);
   }
+  
   
 }
 
@@ -159,6 +184,7 @@ void mousePressed() {
     float cy = musicMenuY;
     float cw = musicMenuWidth;
     float ch = musicMenuHeight;
+
     
     lineX = cx + cw * 0.02;
     lineY = cy + ch * 0.84;
@@ -189,17 +215,17 @@ void mousePressed() {
     soundEffectsY = cy + ch;
     soundEffectsWidth = cw * 0.5;
     soundEffectsHeight = ch * 0.5;
-    
+    if (circleOver) {
+      expandCircle(loopOnceExtent);
+  }
+  else {
+     loopInfiniteExtent = cw * 0.109;
+  }
     musicButtonOFF = true;
   } else if (clickedOff) {
     // Deactivate music menu 
     musicButtonOFF = false;
   }
-  
-  
-  
-  
-  
 }
 
 // Utility: check if a point is inside a triangle
