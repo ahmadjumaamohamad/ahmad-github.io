@@ -29,7 +29,7 @@ float pauseX, pauseY, pauseExtent;
 float nextX, nextY, nextExtent;
 
 float soundEffectsX, soundEffectsY, soundEffectsWidth, soundEffectsHeight;
-
+float exitX, exiteY, exiteWidth, exiteHeight;
 //images;
 PImage[] images;
 int totalImages = 10; 
@@ -50,22 +50,24 @@ void setup() {
   appWidth = displayWidth;
   appHeight = displayHeight;
 
-  // Initial triangle coordinates for ON (left) and OFF (right) buttons
+  exitX = displayWidth*9.6/10;
+  exiteY = displayHeight*0/10;
+  exiteWidth = displayWidth*0.40/10;
+  exiteHeight = displayHeight*0.5/10;
+
   onMenuX = displayWidth * 0.05 / 10;
   onMenuY = displayHeight * 2.1 / 10;
-  onMenuM = displayWidth * 0.05 / 10;
+  onMenuM = onMenuX;
   onMenuN = displayHeight * 2.4 / 10;
   onMenuA = displayWidth * 0.2 / 10;
   onMenuB = displayHeight * 2.265 / 10;
 
   offMenuX = displayWidth * 1 / 10;
   offMenuY = displayHeight * 2.1 / 10;
-  offMenuM = displayWidth * 1 / 10;
+  offMenuM = offMenuX;
   offMenuN = displayHeight * 2.4 / 10;
   offMenuA = displayWidth * 1.1 / 10;
   offMenuB = displayHeight * 2.265 / 10;
-  
-  
  
   //img
   String path = sketchPath("image");
@@ -94,70 +96,39 @@ void setup() {
 
   playList[currentSong] = minim.loadFile(filePath);
   println("Loaded: " + filePath);
-  
-  
+  fill(220,220,220);
+  rect(exitX, exiteY, exiteWidth, exiteHeight);
 
 }
 
 void draw() {
-  background(176, 224, 230); // Redraw background to avoid overdraw
+  //background(176, 224, 230); // Redraw background to avoid overdraw
   PImage frameToDisplay = getNextFrame();
   update(mouseX, mouseY);
   stroke(0);
   strokeWeight(2);
   fill(255, 255, 255);
-  
+
   //image(frameToDisplay, x, y, width, height);  
   if (!musicButtonOFF) {
     // Draw ON triangle
-    
     triangle(onMenuX, onMenuY, onMenuM, onMenuN, onMenuA, onMenuB);
-  } else {
-if (circleOver) {
-  loopOnceExtent = expandCircle(loopOnceExtent);
-  if (isExpanding) {
-    if (loopOnceExtent < targetExtent) {
-      loopOnceExtent += expansionSpeed;
-      if (loopOnceExtent >= targetExtent) {
-        loopOnceExtent = targetExtent;
-        isExpanding = false;
-      }
-    }
-} }
-  else {
-    isExpanding = false;
   }
-
-    
-    stroke(0);
-    circle(loopOnceX,loopOnceY, loopOnceExtent);
-    // Draw off and on triangle and menu rectangle
+  else if (musicButtonOFF) {
     strokeWeight(6);
     rect(musicMenuX, musicMenuY, musicMenuWidth, musicMenuHeight);
-   // image(frameToDisplay,musicMenuX, musicMenuY, musicMenuWidth, musicMenuHeight);
     strokeWeight(2);
-    triangle(offMenuX, offMenuY, offMenuM, offMenuN, offMenuA, offMenuB);
-    strokeWeight(1.6);
     rect(lineX, lineY, lineWidth, lineHeight);
-    noStroke();
-    
-    fill(2, 0, 0, 2); 
-    //rect(musicMenuX, musicMenuY, musicMenuWidth, musicMenuHeight);    
-    circle(loopOnceX,loopOnceY, loopOnceExtent);
-      image(images[4], loopOnceX - loopOnceExtent / 2, loopOnceY - loopOnceExtent / 2, loopOnceExtent, loopOnceExtent);
-    circle(loopInfiniteX, loopInfiniteY, loopInfiniteExtent);
-      image(images[5], loopInfiniteX - loopInfiniteExtent / 2, loopInfiniteY - loopInfiniteExtent / 2, loopInfiniteExtent, loopInfiniteExtent);
-    circle(nextX, nextY, nextExtent);
-      image(images[1], nextX - nextExtent / 2, nextY - nextExtent / 2, nextExtent, nextExtent);
-    circle(pauseX, pauseY, pauseExtent);  
-      image(images[2], pauseX - pauseExtent / 2, pauseY - pauseExtent / 2, pauseExtent, pauseExtent);
-    circle(previousX, previousY, previousExtent);
+
+    image(images[4], loopOnceX - loopOnceExtent / 2, loopOnceY - loopOnceExtent / 2, loopOnceExtent, loopOnceExtent);
+    image(images[5], loopInfiniteX - loopInfiniteExtent / 2, loopInfiniteY - loopInfiniteExtent / 2, loopInfiniteExtent, loopInfiniteExtent);
+    image(images[1], nextX - nextExtent / 2, nextY - nextExtent / 2, nextExtent, nextExtent);
+    image(images[2], pauseX - pauseExtent / 2, pauseY - pauseExtent / 2, pauseExtent, pauseExtent);
     image(images[3], previousX - previousExtent / 2, previousY - previousExtent / 2, previousExtent, previousExtent);
-    fill(2, 0, 0, 2); 
-    strokeWeight(2);
+
+    // Show OFF triangle
+    triangle(offMenuX, offMenuY, offMenuM, offMenuN, offMenuA, offMenuB);
   }
-  
-  
 }
 
 // Mouse interaction
@@ -172,20 +143,20 @@ void mousePressed() {
     musicMenuWidth = displayWidth * 1.7 / 10;
     musicMenuHeight = displayHeight * 0.54 / 10;
 
-    // Set new triangle for OFF button
+    // Update triangle for OFF button
     offMenuX = displayWidth * 1.75 / 10;
     offMenuY = displayHeight * 2.1 / 10;
-    offMenuM = displayWidth * 1.75 / 10;
+    offMenuM = offMenuX;
     offMenuN = displayHeight * 2.4 / 10;
     offMenuA = displayWidth * 1.9 / 10;
     offMenuB = displayHeight * 2.265 / 10;
-    
-    float cx = musicMenuX;
-    float cy = musicMenuY;
-    float cw = musicMenuWidth;
-    float ch = musicMenuHeight;
 
-    
+    // Update music button layout positions
+    cx = musicMenuX;
+    cy = musicMenuY;
+    cw = musicMenuWidth;
+    ch = musicMenuHeight;
+
     lineX = cx + cw * 0.02;
     lineY = cy + ch * 0.84;
     lineWidth = cw * 0.95;
@@ -205,28 +176,31 @@ void mousePressed() {
 
     loopInfiniteX = cx + cw * 0.35;
     loopInfiniteY = cy + ch * 0.45;
-    loopInfiniteExtent = cw * 0.109;
+    loopInfiniteExtent = cw * 0.1;
 
     loopOnceX = cx + cw * 0.20;
     loopOnceY = cy + ch * 0.45;
-    loopOnceExtent = cw * 0.109;
+    loopOnceExtent = cw * 0.107;
 
     soundEffectsX = cx + cw;
     soundEffectsY = cy + ch;
     soundEffectsWidth = cw * 0.5;
     soundEffectsHeight = ch * 0.5;
-    if (circleOver) {
-      expandCircle(loopOnceExtent);
-  }
-  else {
-     loopInfiniteExtent = cw * 0.109;
-  }
+
     musicButtonOFF = true;
-  } else if (clickedOff) {
-    // Deactivate music menu 
+  } 
+  else if (clickedOff) {
+    // Deactivate music menu
     musicButtonOFF = false;
   }
+
 }
+void keyPressed()  {
+  if (key == 'Q'){
+    exit();
+  }
+}
+
 
 // Utility: check if a point is inside a triangle
 boolean pointInTriangle(float px, float py, float x1, float y1, float x2, float y2,float x3, float y3) {
