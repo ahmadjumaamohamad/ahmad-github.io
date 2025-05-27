@@ -117,6 +117,7 @@ void draw() {
   else if (musicButtonOFF) {
     strokeWeight(6);
     rect(musicMenuX, musicMenuY, musicMenuWidth, musicMenuHeight);
+    image(frameToDisplay,musicMenuX, musicMenuY, musicMenuWidth, musicMenuHeight);
     strokeWeight(2);
     rect(lineX, lineY, lineWidth, lineHeight);
 
@@ -125,7 +126,7 @@ void draw() {
     image(images[1], nextX - nextExtent / 2, nextY - nextExtent / 2, nextExtent, nextExtent);
     image(images[2], pauseX - pauseExtent / 2, pauseY - pauseExtent / 2, pauseExtent, pauseExtent);
     image(images[3], previousX - previousExtent / 2, previousY - previousExtent / 2, previousExtent, previousExtent);
-
+    
     // Show OFF triangle
     triangle(offMenuX, offMenuY, offMenuM, offMenuN, offMenuA, offMenuB);
   }
