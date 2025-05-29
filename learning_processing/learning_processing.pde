@@ -62,12 +62,7 @@ void setup() {
   onMenuA = displayWidth * 0.2 / 10;
   onMenuB = displayHeight * 2.265 / 10;
 
-  offMenuX = displayWidth * 1 / 10;
-  offMenuY = displayHeight * 2.1 / 10;
-  offMenuM = offMenuX;
-  offMenuN = displayHeight * 2.4 / 10;
-  offMenuA = displayWidth * 1.1 / 10;
-  offMenuB = displayHeight * 2.265 / 10;
+
  
   //img
   String path = sketchPath("image");
@@ -105,7 +100,7 @@ void draw() {
   //background(176, 224, 230); // Redraw background to avoid overdraw
   PImage frameToDisplay = getNextFrame();
   update(mouseX, mouseY);
-  stroke(0);
+
   strokeWeight(2);
   fill(255, 255, 255);
 
@@ -114,7 +109,7 @@ void draw() {
     // Draw ON triangle
     triangle(onMenuX, onMenuY, onMenuM, onMenuN, onMenuA, onMenuB);
   }
-  else if (musicButtonOFF) {
+  else  {
     strokeWeight(6);
     rect(musicMenuX, musicMenuY, musicMenuWidth, musicMenuHeight);
     image(frameToDisplay,musicMenuX, musicMenuY, musicMenuWidth, musicMenuHeight);
@@ -129,6 +124,7 @@ void draw() {
     
     // Show OFF triangle
     triangle(offMenuX, offMenuY, offMenuM, offMenuN, offMenuA, offMenuB);
+
   }
 }
 
@@ -138,6 +134,17 @@ void mousePressed() {
   boolean clickedOff = pointInTriangle(mouseX, mouseY, offMenuX, offMenuY, offMenuM, offMenuN, offMenuA, offMenuB);
   
   if (clickedOn) {
+    activateMusicMenu();
+  } else if (clickedOff) {
+    deactivateMusicMenu();
+  }
+}
+void keyPressed()  {
+  if (key == 'Q'){
+    exit();
+  }
+}
+void activateMusicMenu() {
     // Activate music menu
     musicMenuX = displayWidth * 0 / 10;
     musicMenuY = displayHeight * 2 / 10;
@@ -189,17 +196,10 @@ void mousePressed() {
     soundEffectsHeight = ch * 0.5;
 
     musicButtonOFF = true;
-  } 
-  else if (clickedOff) {
-    // Deactivate music menu
-    musicButtonOFF = false;
-  }
-
+   
 }
-void keyPressed()  {
-  if (key == 'Q'){
-    exit();
-  }
+void deactivateMusicMenu() {
+  musicButtonOFF = false;
 }
 
 
