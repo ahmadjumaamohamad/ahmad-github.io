@@ -27,6 +27,10 @@ float loopInfiniteX, loopInfiniteY, loopInfiniteExtent;
 float previousX, previousY, previousExtent;
 float pauseX, pauseY, pauseExtent;
 float nextX, nextY, nextExtent;
+//
+
+//
+int stopButtonTimer=0, stopTimer=5, stopTimeStamp=0;
 
 float soundEffectsX, soundEffectsY, soundEffectsWidth, soundEffectsHeight;
 float exitX, exiteY, exiteWidth, exiteHeight;
@@ -107,6 +111,7 @@ void draw() {
   //image(frameToDisplay, x, y, width, height);  
   if (!musicButtonOFF) {
     // Draw ON triangle
+    background(176, 224, 230);
     triangle(onMenuX, onMenuY, onMenuM, onMenuN, onMenuA, onMenuB);
   }
   else  {
@@ -140,9 +145,19 @@ void mousePressed() {
   }
 }
 void keyPressed()  {
-  if (key == 'Q'){
+  if (key == 'Q' || key == 'q'){
     exit();
   }
+  if (key == 'J' || key == 'j'){
+//
+  }
+  if (key == 'K' || key == 'k'){
+       pauseContinueButton();
+  }
+  if (key == 'L' || key == 'l'){
+    goForward();
+  }
+  
 }
 void activateMusicMenu() {
     // Activate music menu
@@ -194,7 +209,6 @@ void activateMusicMenu() {
     soundEffectsY = cy + ch;
     soundEffectsWidth = cw * 0.5;
     soundEffectsHeight = ch * 0.5;
-
     musicButtonOFF = true;
    
 }
