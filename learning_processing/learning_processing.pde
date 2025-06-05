@@ -42,6 +42,9 @@ float rectX, rectY, rectW, rectH;
 //float X,Y, Width, Height;
 //float X, Y, Extent;
 
+int gPressCount = 0;       // Global variable
+boolean randomLoop = false; // Flag for continuous random play
+
 Boolean deactiveateAutoPlay=false;
 boolean musicButtonOFF = false;
 // Global variables
@@ -89,11 +92,45 @@ void setup() {
   minim = new Minim(this);
   String musicPathway = "Music/";
   String songName = "Cycles";
+  String pong = "pong";
+  String pongTwo = "pong2";
+  String song = "song";
+  String songTwo = "arcade_song";
+  String songThree = "arcade_song2";
+  
   String fileExtension = ".mp3";
   String musicDirectory = "../../" + musicPathway;
   String filePath = musicDirectory + songName + fileExtension;
 
-  playList[currentSong] = minim.loadFile(filePath);
+  currentSong=0;
+  //
+  playList[ currentSong ] = minim.loadFile( filePath );
+  currentSong++;
+  filePath = musicDirectory + pong + fileExtension; //relative pathway or directory
+  println( filePath );
+  playList[ currentSong ] = minim.loadFile( filePath ); //ERROR: Verify Spelling & Library installed, Sketch / Import Library
+  //
+  currentSong++;
+  filePath = musicDirectory + pongTwo + fileExtension; //relative pathway or directory
+  println( filePath );
+  playList[ currentSong ] = minim.loadFile( filePath );
+  
+  currentSong++;
+  filePath = musicDirectory + song + fileExtension; //relative pathway or directory
+  println( filePath );
+  playList[ currentSong ] = minim.loadFile( filePath );
+  
+  currentSong++;
+  filePath = musicDirectory + songTwo + fileExtension; //relative pathway or directory
+  println( filePath );
+  playList[ currentSong ] = minim.loadFile( filePath );
+  
+    currentSong++;
+  filePath = musicDirectory + songThree + fileExtension; //relative pathway or directory
+  println( filePath );
+  playList[ currentSong ] = minim.loadFile( filePath );
+  
+  currentSong=0;
   println("Loaded: " + filePath);
   fill(220,220,220);
   rect(exitX, exiteY, exiteWidth, exiteHeight);
@@ -149,16 +186,112 @@ void keyPressed()  {
     exit();
   }
   if (key == 'J' || key == 'j'){
-//
-  }
-  if (key == 'K' || key == 'k'){
-       pauseContinueButton();
-  }
-  if (key == 'L' || key == 'l'){
-    goForward();
-  }
-  
+    if (playList[currentSong].isPlaying() || playList[currentSong].position() < playList[currentSong].length()) {
+      int newPosition = playList[currentSong].position() - 10000; // 10,000 milliseconds = 10 seconds
+      if (newPosition < playList[currentSong].length()) {
+        playList[currentSong].cue(newPosition); // Jump to new position
+      } else {
+        playList[currentSong].rewind(); // If it exceeds length, restart the song
+        playList[currentSong].pause();  // Or stop playing
+        println("Reached end of song.");
+      }
+      println("Backward 10 seconds.");
+    }
 }
+  if (key == 'K' || key == 'k'){
+    if ( playList[currentSong].isPlaying() ) {
+        println("I am paused");
+        playList[currentSong].pause();
+        stopButtonTimer = second(); //Returns 0-59
+}
+      else {
+        playList[currentSong].play();
+        println("I am playing");
+          }
+}
+  if (key == 'L' || key == 'l') {
+    if (playList[currentSong].isPlaying() || playList[currentSong].position() < playList[currentSong].length()) {
+      int newPosition = playList[currentSong].position() + 10000; // 10,000 milliseconds = 10 seconds
+      if (newPosition < playList[currentSong].length()) {
+        playList[currentSong].cue(newPosition); // Jump to new position
+      } else {
+        playList[currentSong].rewind(); // If it exceeds length, restart the song
+        playList[currentSong].pause();  // Or stop playing
+        println("Reached end of song.");
+      }
+      println("Forwarded 10 seconds.");
+}
+} 
+  if (key == 'G' || key == 'g'){
+  // if clicked once it play rondomly, if clicked twice, play once, if clicked threice keep playing
+   gPressCount++;
+
+    // Reset after third press to loop through behavior
+    if (gPressCount > 3) {
+      gPressCount = 1;
+    }
+
+    if (playList[currentSong].isPlaying()) {
+      playList[currentSong].pause();
+      playList[currentSong].rewind();
+    }
+
+    if (gPressCount == 1) {
+      println("Random play ONCE.");
+      playRandomSong();
+    } else if (gPressCount == 2) {
+      println("Random play ONE SONG only (non-looping).");
+      playRandomSong();
+    } else if (gPressCount == 3) {
+      println("Random CONTINUOUS play enabled.");
+      randomLoop = true;
+      playRandomSong();
+    }
+  }
+if (key == 'N' || key == 'n') {
+  // Stop current song
+  if (playList[currentSong].isPlaying()) {
+    playList[currentSong].pause();
+    playList[currentSong].rewind();
+  }
+
+  // Move to next song (wrap around)
+  currentSong = (currentSong + 1) % numberOfSongs;
+  playList[currentSong].rewind();
+  playList[currentSong].play();
+  println("Now playing next song: " + currentSong);
+}
+
+if (key == 'M' || key == 'm') { // FIX: use 'm', not 'n' again
+  // Stop current song
+  if (playList[currentSong].isPlaying()) {
+    playList[currentSong].pause();
+    playList[currentSong].rewind();
+  }
+
+  // Move to previous song (wrap around)
+  currentSong = (currentSong - 1 + numberOfSongs) % numberOfSongs;
+  playList[currentSong].rewind();
+  playList[currentSong].play();
+  println("Now playing previous song: " + currentSong);
+}
+}
+void checkForSongEnd() {
+  if (randomLoop && !playList[currentSong].isPlaying()) {
+    playRandomSong();
+  }
+}
+
+void playRandomSong() {
+  int randomIndex = currentSong;
+  while (randomIndex == currentSong && numberOfSongs > 1) {
+    randomIndex = int(random(numberOfSongs));
+  }
+  currentSong = randomIndex;
+  playList[currentSong].rewind();
+  playList[currentSong].play();
+}
+
 void activateMusicMenu() {
     // Activate music menu
     musicMenuX = displayWidth * 0 / 10;
