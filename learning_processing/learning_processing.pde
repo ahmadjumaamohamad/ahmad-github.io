@@ -6,7 +6,7 @@ import ddf.minim.spi.*;
 import ddf.minim.ugens.*;
 
 Minim minim;
-int numberOfSongs = 8;
+int numberOfSongs = 6;
 AudioPlayer[] playList = new AudioPlayer[ numberOfSongs ];
 int currentSong = numberOfSongs - numberOfSongs;
 //Global Variables
@@ -41,10 +41,10 @@ int totalImages = 10;
 float rectX, rectY, rectW, rectH;
 //float X,Y, Width, Height;
 //float X, Y, Extent;
-
+int playMode = 0;
 int gPressCount = 0;       // Global variable
 boolean randomLoop = false; // Flag for continuous random play
-
+boolean autoPlayEnabled = true;
 Boolean deactiveateAutoPlay=false;
 boolean musicButtonOFF = false;
 // Global variables
@@ -144,7 +144,7 @@ void draw() {
 
   strokeWeight(2);
   fill(255, 255, 255);
-
+    checkForSongEnd();
   //image(frameToDisplay, x, y, width, height);  
   if (!musicButtonOFF) {
     // Draw ON triangle
@@ -168,6 +168,8 @@ void draw() {
     triangle(offMenuX, offMenuY, offMenuM, offMenuN, offMenuA, offMenuB);
 
   }
+
+
 }
 
 // Mouse interaction
@@ -185,112 +187,19 @@ void keyPressed()  {
   if (key == 'Q' || key == 'q'){
     exit();
   }
-  if (key == 'J' || key == 'j'){
-    if (playList[currentSong].isPlaying() || playList[currentSong].position() < playList[currentSong].length()) {
-      int newPosition = playList[currentSong].position() - 10000; // 10,000 milliseconds = 10 seconds
-      if (newPosition < playList[currentSong].length()) {
-        playList[currentSong].cue(newPosition); // Jump to new position
-      } else {
-        playList[currentSong].rewind(); // If it exceeds length, restart the song
-        playList[currentSong].pause();  // Or stop playing
-        println("Reached end of song.");
-      }
-      println("Backward 10 seconds.");
-    }
-}
-  if (key == 'K' || key == 'k'){
-    if ( playList[currentSong].isPlaying() ) {
-        println("I am paused");
-        playList[currentSong].pause();
-        stopButtonTimer = second(); //Returns 0-59
-}
-      else {
-        playList[currentSong].play();
-        println("I am playing");
-          }
-}
-  if (key == 'L' || key == 'l') {
-    if (playList[currentSong].isPlaying() || playList[currentSong].position() < playList[currentSong].length()) {
-      int newPosition = playList[currentSong].position() + 10000; // 10,000 milliseconds = 10 seconds
-      if (newPosition < playList[currentSong].length()) {
-        playList[currentSong].cue(newPosition); // Jump to new position
-      } else {
-        playList[currentSong].rewind(); // If it exceeds length, restart the song
-        playList[currentSong].pause();  // Or stop playing
-        println("Reached end of song.");
-      }
-      println("Forwarded 10 seconds.");
-}
-} 
-  if (key == 'G' || key == 'g'){
-  // if clicked once it play rondomly, if clicked twice, play once, if clicked threice keep playing
-   gPressCount++;
+if (key == 'J' || key == 'j') backWard();
 
-    // Reset after third press to loop through behavior
-    if (gPressCount > 3) {
-      gPressCount = 1;
-    }
-
-    if (playList[currentSong].isPlaying()) {
-      playList[currentSong].pause();
-      playList[currentSong].rewind();
-    }
-
-    if (gPressCount == 1) {
-      println("Random play ONCE.");
-      playRandomSong();
-    } else if (gPressCount == 2) {
-      println("Random play ONE SONG only (non-looping).");
-      playRandomSong();
-    } else if (gPressCount == 3) {
-      println("Random CONTINUOUS play enabled.");
-      randomLoop = true;
-      playRandomSong();
-    }
-  }
-if (key == 'N' || key == 'n') {
-  // Stop current song
-  if (playList[currentSong].isPlaying()) {
-    playList[currentSong].pause();
-    playList[currentSong].rewind();
-  }
-
-  // Move to next song (wrap around)
-  currentSong = (currentSong + 1) % numberOfSongs;
-  playList[currentSong].rewind();
-  playList[currentSong].play();
-  println("Now playing next song: " + currentSong);
+if (key == 'K' || key == 'k') stopButton();
+  
+if (key == 'L' || key == 'l') forward();
+  
+if (key == 'G' || key == 'g') cycleButton();
+  
+if (key == 'M' || key == 'm') nextSong();
+  
+if (key == 'N' || key == 'n')  previousSong();
 }
 
-if (key == 'M' || key == 'm') { // FIX: use 'm', not 'n' again
-  // Stop current song
-  if (playList[currentSong].isPlaying()) {
-    playList[currentSong].pause();
-    playList[currentSong].rewind();
-  }
-
-  // Move to previous song (wrap around)
-  currentSong = (currentSong - 1 + numberOfSongs) % numberOfSongs;
-  playList[currentSong].rewind();
-  playList[currentSong].play();
-  println("Now playing previous song: " + currentSong);
-}
-}
-void checkForSongEnd() {
-  if (randomLoop && !playList[currentSong].isPlaying()) {
-    playRandomSong();
-  }
-}
-
-void playRandomSong() {
-  int randomIndex = currentSong;
-  while (randomIndex == currentSong && numberOfSongs > 1) {
-    randomIndex = int(random(numberOfSongs));
-  }
-  currentSong = randomIndex;
-  playList[currentSong].rewind();
-  playList[currentSong].play();
-}
 
 void activateMusicMenu() {
     // Activate music menu
