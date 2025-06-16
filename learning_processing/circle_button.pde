@@ -9,13 +9,7 @@ boolean rectOver = false;
 boolean circleOver = false;
 float currentSize;
 
-void update(float x, float y) {
-  if (overCircle(loopOnceX,loopOnceY, loopOnceExtent) ) {
-    circleOver = true;
-  } else {
-    circleOver = false;
-  }
-}
+
 float expandCircle(float diameter){
   return diameter * 1.03;
 }

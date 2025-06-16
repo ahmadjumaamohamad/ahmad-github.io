@@ -140,7 +140,7 @@ void setup() {
 void draw() {
   //background(176, 224, 230); // Redraw background to avoid overdraw
   PImage frameToDisplay = getNextFrame();
-  update(mouseX, mouseY);
+
 
   strokeWeight(2);
   fill(255, 255, 255);
@@ -157,7 +157,22 @@ void draw() {
     image(frameToDisplay,musicMenuX, musicMenuY, musicMenuWidth, musicMenuHeight);
     strokeWeight(2);
     rect(lineX, lineY, lineWidth, lineHeight);
+    float songLength = playList[currentSong].length();     // total length in ms
+    float songPosition = playList[currentSong].position(); // current position in ms
 
+    if (songLength > 0) {
+      float progressPercent = songPosition / songLength;
+      float progressBarWidth = lineWidth * progressPercent;
+      
+      // Draw background of progress bar (e.g., light gray)
+      fill(200);
+      rect(lineX, lineY, lineWidth, lineHeight);
+    
+      // Draw progress (blue)
+      fill(0, 150, 255);
+      rect(lineX, lineY, progressBarWidth, lineHeight);
+    }
+    fill(255, 255, 255);
     image(images[4], loopOnceX - loopOnceExtent / 2, loopOnceY - loopOnceExtent / 2, loopOnceExtent, loopOnceExtent);
     image(images[5], loopInfiniteX - loopInfiniteExtent / 2, loopInfiniteY - loopInfiniteExtent / 2, loopInfiniteExtent, loopInfiniteExtent);
     image(images[1], nextX - nextExtent / 2, nextY - nextExtent / 2, nextExtent, nextExtent);
@@ -179,9 +194,33 @@ void mousePressed() {
   
   if (clickedOn) {
     activateMusicMenu();
-  } else if (clickedOff) {
+  }
+  else if (clickedOff) {
     deactivateMusicMenu();
   }
+    // Music control buttons
+  else if (musicButtonOFF) {
+    if (overCircle(pauseX, pauseY, pauseExtent)) {
+      stopButton();
+    } else if (overCircle(nextX, nextY, nextExtent)) {
+      forward();
+    } else if (overCircle(previousX, previousY, previousExtent)) {
+      backWard();
+    } else if (overCircle(loopOnceX, loopOnceY, loopOnceExtent)) {
+      cycleButton();
+    } else if (overCircle(loopInfiniteX, loopInfiniteY, loopInfiniteExtent)) {
+      loop();
+    }   // Check if clicked inside progress bar
+      else if (musicButtonOFF && mouseX > lineX && mouseX < lineX + lineWidth &&
+        mouseY > lineY && mouseY < lineY + lineHeight) {
+        
+        float clickedPercent = (mouseX - lineX) / lineWidth;
+        int newPosition = (int)(clickedPercent * playList[currentSong].length());
+        playList[currentSong].cue(newPosition);
+      }  // Stop music if line is clicked
+      }
+  
+
 }
 void keyPressed()  {
   if (key == 'Q' || key == 'q'){

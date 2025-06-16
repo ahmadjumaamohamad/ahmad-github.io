@@ -49,23 +49,17 @@ void previousSong()
 void cycleButton(){
     playMode = (playMode % 3) + 1;  // Cycles 1→2→3→1...
 
-  // Stop any current playback
-  if (playList[currentSong].isPlaying()) {
-    playList[currentSong].pause();
-    playList[currentSong].rewind();
-  }
-
-  if (playMode == 1) {
+  if (playMode == 0) {
     println("▶ Mode 1: Play Random Continuously");
     playRandomSong();  // Random, continues randomly
   } 
-  else if (playMode == 2) {
+  else if (playMode == 1) {
     println("▶ Mode 2: Autoplay Sequential");
     autoPlayEnabled = true;
     playList[currentSong].rewind();
     playList[currentSong].play();
   } 
-  else if (playMode == 3) {
+  else if (playMode == 2) {
     println("▶ Mode 3: Play Once Only");
     autoPlayEnabled = false;
     playList[currentSong].rewind();
@@ -101,6 +95,7 @@ if (newPosition < playList[currentSong].length()) {
 void stopButton() {
   if (playList[currentSong].isPlaying()) {
     playList[currentSong].pause();
+    playList[currentSong].rewind();
   }
 
 else {
